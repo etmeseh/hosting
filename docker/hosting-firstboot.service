@@ -1,0 +1,19 @@
+[Unit]
+Description=Run the hosting install.sh once on first container boot
+After=network-online.target
+Wants=network-online.target
+ConditionPathExists=!/var/www/.hosting-firstboot.done
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+# install.sh assumes an interactive root login shell (HOME=/root); systemd
+# services don't set that by default, which breaks composer among others.
+Environment=HOME=/root
+# Forward install.sh's own HOSTING_* overrides (vanity prefix, passwords, ...)
+# from the container's environment into this unit's environment.
+PassEnvironment=HOSTING_VANITY_PREFIX HOSTING_VANITY_THREADS HOSTING_DB_PASS HOSTING_PMA_PASS HOSTING_ADMIN_PASS HOSTING_SKIP_BINARIES
+ExecStart=/bin/sh -c '/root/hosting/install.sh --non-interactive >>/var/log/hosting-firstboot.log 2>&1 && touch /var/www/.hosting-firstboot.done'
+
+[Install]
+WantedBy=multi-user.target

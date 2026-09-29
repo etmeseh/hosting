@@ -1,0 +1,35 @@
+services:
+  hosting:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    container_name: hosting
+    # Optional overrides for install.sh, read by the hosting-firstboot
+    # service on first boot. Leave unset for random passwords and a
+    # random onion address. Set via a .env file or the shell environment,
+    # e.g.: HOSTING_VANITY_PREFIX=myprefix docker compose -f docker/docker-compose.yml up -d
+    environment:
+      HOSTING_VANITY_PREFIX: "${HOSTING_VANITY_PREFIX:-}"
+      HOSTING_VANITY_THREADS: "${HOSTING_VANITY_THREADS:-}"
+      HOSTING_DB_PASS: "${HOSTING_DB_PASS:-}"
+      HOSTING_PMA_PASS: "${HOSTING_PMA_PASS:-}"
+      HOSTING_ADMIN_PASS: "${HOSTING_ADMIN_PASS:-}"
+      HOSTING_SKIP_BINARIES: "${HOSTING_SKIP_BINARIES:-}"
+    privileged: true
+    cgroup: host
+    tmpfs:
+      - /run
+      - /run/lock
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:rw
+      - mysql-data:/var/lib/mysql
+      - www-data:/var/www
+      - tor-data:/var/lib/tor
+      - home-data:/home
+    restart: unless-stopped
+
+volumes:
+  mysql-data:
+  www-data:
+  tor-data:
+  home-data:
