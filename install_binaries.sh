@@ -11,8 +11,8 @@ DEBIAN_FRONTEND=noninteractive apt-get --no-install-recommends install -y apt-tr
 DEBIAN_FRONTEND=noninteractive apt-get --no-install-recommends install -y autoconf automake bison g++ gcc ghostscript libpam0g-dev gnupg libaom-dev $(apt-cache search --names-only 'libargon2(-0)?-dev' | awk '{print $1;}' | head -n1) binutils-dev libbrotli-dev libbz2-dev libcurl4-openssl-dev libdjvulibre-dev libedit-dev $(apt-cache search --names-only 'libenchant(-2)?-dev' | awk '{print $1;}' | head -n1) libffi-dev $(apt-cache search --names-only libfreetype6?-dev | awk '{print $1;}' | head -n1) libfftw3-dev libfribidi-dev libgd-dev libgmp-dev libgpg-error-dev libgpgme-dev libgraphviz-dev libgs-dev libharfbuzz-dev libheif-dev libjbig-dev libjbig2dec0-dev libjxl-dev libkrb5-dev libldap2-dev liblmdb-dev liblqr-1-0-dev libmariadb-dev libonig-dev libopenexr-dev libopenjp2-7-dev libpango1.0-dev libpng-dev libpspell-dev libqdbm-dev libraqm-dev libraw-dev libreadline-dev librsvg2-dev libsasl2-dev libsodium-dev libssh2-1-dev libssl-dev libsqlite3-dev libsystemd-dev libtidy-dev libtool libwebp-dev libwmf-dev libxml2-dev libxpm-dev libxslt1-dev libzip-dev libzstd-dev make patch poppler-utils re2c zlib1g-dev
 
 # build uw-imap c-client from source (removed from trixie, needed for PHP --with-imap / SquirrelMail)
+cd /tmp
 if [ ! -e /usr/local/lib/libc-client.a ]; then
-	cd /tmp
 	curl -sSL https://deb.debian.org/debian/pool/main/u/uw-imap/uw-imap_2007f~dfsg.orig.tar.gz | tar xz
 	curl -sSL https://deb.debian.org/debian/pool/main/u/uw-imap/uw-imap_2007f~dfsg-7.debian.tar.xz | tar xJ -C imap-2007f~dfsg
 	cd imap-2007f~dfsg
@@ -25,7 +25,7 @@ if [ ! -e /usr/local/lib/libc-client.a ]; then
 	mkdir -p /usr/local/include/c-client
 	cp c-client/*.h /usr/local/include/c-client/
 	ln -sf /usr/local/include/c-client /usr/include/c-client
-	cd "$OLDPWD"
+	cd /tmp
 	rm -rf /tmp/imap-2007f~dfsg
 fi
 
