@@ -14,6 +14,13 @@ Environment=HOME=/root
 # from the container's environment into this unit's environment.
 PassEnvironment=HOSTING_VANITY_PREFIX HOSTING_VANITY_THREADS HOSTING_DB_PASS HOSTING_PMA_PASS HOSTING_ADMIN_PASS HOSTING_SKIP_BINARIES
 ExecStart=/bin/sh -c '/root/hosting/install.sh --non-interactive >>/var/log/hosting-firstboot.log 2>&1 && touch /var/www/.hosting-firstboot.done'
+# install.sh only enables hosting.timer/hosting-del.timer (it expects a
+# reboot to actually start them, per its own "reboot now" prompt at the
+# end); hosting-autoscale.timer is the only one it starts explicitly. On
+# a container there's no equivalent reboot, so without this, new account
+# registrations sit in the new_account queue forever since hosting.timer
+# (which runs cron.php to provision them) never fires.
+ExecStartPost=/bin/sh -c 'systemctl start hosting.timer hosting-del.timer 2>/dev/null || true'
 
 [Install]
 WantedBy=multi-user.target
