@@ -87,11 +87,11 @@ if [ -f /var/www/common.php ]; then
     cp /var/www/common.php "$BACKUP_DIR/common.php.bak"
     eval $(php8.2 -r "
         require('/var/www/common.php');
-        echo 'DBHOST=' . escapeshellarg(DBHOST) . '\n';
-        echo 'DBPASS=' . escapeshellarg(DBPASS) . '\n';
-        echo 'ADMIN_PASSWORD=' . escapeshellarg(ADMIN_PASSWORD) . '\n';
-        echo 'ADDRESS=' . escapeshellarg(ADDRESS) . '\n';
-        echo 'ONION_KEY_ENCRYPTION_KEY=' . escapeshellarg(ONION_KEY_ENCRYPTION_KEY) . '\n';
+        echo 'DBHOST=' . escapeshellarg(DBHOST) . \"\n\";
+        echo 'DBPASS=' . escapeshellarg(DBPASS) . \"\n\";
+        echo 'ADMIN_PASSWORD=' . escapeshellarg(ADMIN_PASSWORD) . \"\n\";
+        echo 'ADDRESS=' . escapeshellarg(ADDRESS) . \"\n\";
+        echo 'ONION_KEY_ENCRYPTION_KEY=' . escapeshellarg(ONION_KEY_ENCRYPTION_KEY) . \"\n\";
     " 2>/dev/null)
     log_ok "Secrets extracted from current config"
 else
