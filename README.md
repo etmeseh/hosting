@@ -189,6 +189,13 @@ systemctl enable hosting-del.timer && systemctl enable hosting.timer && systemct
 
 Final step is to reboot, wait about 5 minutes for all services to start, and check if everything is working by creating a test account.
 
+Docker (unofficial):
+--------------------------
+
+If you'd rather try this out in a container than on a real server, see
+[docker/README.md](docker/README.md) for a Compose setup that runs the
+unmodified `install.sh` inside a systemd-enabled Ubuntu 24.04 container.
+
 PHP Versions:
 --------------------------
 
